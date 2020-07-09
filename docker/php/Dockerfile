@@ -1,5 +1,5 @@
 FROM php:7.4-fpm AS local
-COPY docker/php/php.ini /usr/local/etc/php/
+COPY ./docker/php/php.ini /usr/local/etc/php/
 
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
@@ -23,6 +23,6 @@ WORKDIR /var/www
 
 RUN composer global require "laravel/installer"
 
-FROM dev AS remote
+FROM local AS remote
 
-COPY ../../src /var/www
+COPY ./src /var/www
