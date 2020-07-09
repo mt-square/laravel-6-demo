@@ -1,9 +1,12 @@
-version: '3'
+version: '3.8'
 
 services:
   php:
     container_name: laravel-demo-php
-    build: ./docker/php
+    build: 
+      context: ./
+      dockerfile: ./docker/php/Dockerfile
+      target: local
     volumes:
     - ./src:/var/www
 

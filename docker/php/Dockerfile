@@ -1,13 +1,13 @@
-FROM php:7.4-fpm
-COPY php.ini /usr/local/etc/php/
+FROM php:7.4-fpm AS local
+COPY docker/php/php.ini /usr/local/etc/php/
 
 RUN apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libzip-dev \
-        libpng-dev \
-        zlib1g-dev \
-        mariadb-client \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libzip-dev \
+    libpng-dev \
+    zlib1g-dev \
+    mariadb-client \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip pdo_mysql
@@ -16,13 +16,13 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
-
 ENV COMPOSER_HOME /composer
-
 ENV PATH $PATH:/composer/vendor/bin
-
 
 WORKDIR /var/www
 
 RUN composer global require "laravel/installer"
 
+FROM dev AS remote
+
+COPY ../../src /var/www
