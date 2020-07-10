@@ -26,3 +26,5 @@ RUN composer global require "laravel/installer"
 FROM local AS remote
 
 COPY ./src /var/www
+
+RUN chmod -R 777 /var/www/storage
